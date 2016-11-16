@@ -61,6 +61,7 @@ Based on 'jQuery Smart Banner' by Arnold Daniels <arnold@jasny.net> https://gith
           // , getStoreLink: { // Include function here to create custom store link if desired
           //    ios: () => 'https://itunes.apple.com/bar/'
           //    android: () => ''https://play.google.com/store/apps/details?id=foo' }
+          // , originalheight: 460 // Include original window innerHeight in pixels here to trigger the banner to be displayed even in safari as long as the native banner is not displayed
       });
     </script>
   </body>

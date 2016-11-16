@@ -79,8 +79,9 @@ var SmartBanner = function (options) {
 	var runningStandAlone = navigator.standalone;
 	var userDismissed = cookie.get('smartbanner-closed');
 	var userInstalled = cookie.get('smartbanner-installed');
+  var heightUnchanged = this.options.originalHeight && (this.options.originalHeight === window.innerHeight)
 
-	if (unsupported || isMobileSafari || runningStandAlone || userDismissed || userInstalled) {
+	if (unsupported || (isMobileSafari && !heightUnchanged) || runningStandAlone || userDismissed || userInstalled) {
 		return;
 	}
 
