@@ -55,6 +55,12 @@ Based on 'jQuery Smart Banner' by Arnold Daniels <arnold@jasny.net> https://gith
           // , theme: '' // put platform type ('ios', 'android', etc.) here to force single theme on all device
           // , icon: '' // full path to icon image if not using website icon image
           // , force: 'ios' // Uncomment for platform emulation
+          // , appId: { // Include app ID keyed by type to ignore / override HTML meta tags
+          //    ios: '502838820',
+          //    android: 'ru.hh.android' }
+          // , getStoreLink: { // Include function here to create custom store link if desired
+          //    ios: () => 'https://itunes.apple.com/bar/'
+          //    android: () => ''https://play.google.com/store/apps/details?id=foo' }
       });
     </script>
   </body>

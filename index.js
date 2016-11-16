@@ -99,7 +99,9 @@ SmartBanner.prototype = {
 	constructor: SmartBanner,
 
 	create: function () {
-		var link = this.getStoreLink();
+		var link = this.options.getStoreLink && this.options.getStoreLink[this.type]
+      ? this.options.getStoreLink[this.type].call(this)
+      : this.getStoreLink()
 		var inStore = this.options.price[this.type] + ' - ' + this.options.store[this.type];
 		var icon;
 
@@ -166,6 +168,11 @@ SmartBanner.prototype = {
 		});
 	},
 	parseAppId: function () {
+    if (this.options.appId) {
+      this.appId = this.options.appId[this.type]
+      return this.appId
+    }
+
 		var meta = q('meta[name="' + this.appMeta + '"]');
 		if (!meta) {
 			return;
