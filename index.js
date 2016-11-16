@@ -69,31 +69,44 @@ var SmartBanner = function (options) {
 		this.type = 'android';
 	}
 
-	// Don't show banner on ANY of the following conditions:
-	// - device os is not supported,
-	// - user is on mobile safari for ios 6 or greater (iOS >= 6 has native support for SmartAppBanner)
-	// - running on standalone mode
-	// - user dismissed banner
-	var unsupported = !this.type;
-	var isMobileSafari = (this.type === 'ios' && agent.browser.name === 'Mobile Safari' && Number(agent.os.version) >= 6);
-	var runningStandAlone = navigator.standalone;
-	var userDismissed = cookie.get('smartbanner-closed');
-	var userInstalled = cookie.get('smartbanner-installed');
-  var heightUnchanged = this.options.originalHeight && (this.options.originalHeight === window.innerHeight)
+  // Don't show banner on ANY of the following conditions:
+  // - device os is not supported,
+  // - user is on mobile safari for ios 6 or greater (iOS >= 6 has native support for SmartAppBanner)
+  // - running on standalone mode
+  // - user dismissed banner
+  var unsupported = !this.type;
+  var isMobileSafari = (this.type === 'ios' && agent.browser.name === 'Mobile Safari' && Number(agent.os.version) >= 6);
+  var runningStandAlone = navigator.standalone;
+  var userDismissed = cookie.get('smartbanner-closed');
+  var userInstalled = cookie.get('smartbanner-installed');
 
-	if (unsupported || (isMobileSafari && !heightUnchanged) || runningStandAlone || userDismissed || userInstalled) {
-		return;
-	}
+  var finalizeBanner = (function finalizeBanner() {
+    var heightUnchanged = this.options.originalHeight && (this.options.originalHeight === window.innerHeight)
 
-	extend(this, mixins[this.type]);
+    if (unsupported || (isMobileSafari && !heightUnchanged) || runningStandAlone || userDismissed || userInstalled) {
+      return;
+    }
 
-	// - If we dont have app id in meta, dont display the banner
-	if (!this.parseAppId()) {
-		return;
-	}
+    extend(this, mixins[this.type]);
 
-	this.create();
-	this.show();
+    // - If we dont have app id in meta, dont display the banner
+    if (!this.parseAppId()) {
+      return;
+    }
+
+    this.create();
+    this.show();
+  }).bind(this)
+
+  // If `originalHeight` option is specified, allow some time for the native
+  // smart app banner to display before comparing the heights and doing other
+  // final setup:
+  if (isMobileSafari && this.options.originalHeight) {
+    window.setTimeout(finalizeBanner, 200)
+  } else {
+    // Otherwise, go ahead and finalize the banner right away:
+    finalizeBanner()
+  }
 };
 
 SmartBanner.prototype = {
