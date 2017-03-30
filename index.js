@@ -102,7 +102,7 @@ var SmartBanner = function (options) {
   // smart app banner to display before comparing the heights and doing other
   // final setup:
   if (isMobileSafari && this.options.originalHeight) {
-    window.setTimeout(finalizeBanner, 200)
+    window.setTimeout(finalizeBanner, this.options.originalHeightCheckTimeout || 500)
   } else {
     // Otherwise, go ahead and finalize the banner right away:
     finalizeBanner()
